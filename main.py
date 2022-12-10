@@ -1,4 +1,5 @@
 from abc import ABC
+
 from config import *
 
 
@@ -26,4 +27,3 @@ class FootCourier(Courier):
         self.payment_per_hour = foot_courier_config.get("payment_per_hour")
         self.payment_for_the_order = foot_courier_config.get("payment_for_the_order")
         self.speed = foot_courier_config.get("average_speed")
-

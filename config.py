@@ -1,3 +1,5 @@
+from os import environ
+
 # Payment in rubles
 # Speed in kilometers per hour
 # Distance in kilometers, '-1' - not limited
@@ -39,3 +41,4 @@ max_time_to_delivery = 2
 cooking_time = 25
 
 maximum_orders_per_courier = 3
+filepath = environ["PATHCSV"]
