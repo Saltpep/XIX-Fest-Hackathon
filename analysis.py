@@ -14,6 +14,7 @@ class Plot:
         self.orders_per_hours = [0 for _ in range(24)]
         self.orders_per_mouths = [0 for _ in range(12)]
         self.orders_per_day = [0 for _ in range(31)]
+        self.orders_per_week = [0 for _ in range(7)]
 
     def csv_parser(self) -> list[tuple[Any, Any, Any, Any]]:
         csv_data = []
@@ -86,10 +87,33 @@ class Plot:
         plt.show()
 
 
+    def order_per_week(self, save: bool = False):
+        weeks = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс",]
+
+        for row in Plot().csv_parser():
+            date = row[0].split('.')
+            week = datetime.datetime(int(date[2]), int(date[1]), int(date[0]))
+            self.orders_per_week[week.weekday()] += 1
+
+        fig, ax = plt.subplots()
+        ax.bar(weeks, self.orders_per_week, color="yellow", edgecolor="black")
+        ax.grid(axis='y', linestyle='--')
+
+        ax.set_ylabel('Кол-во заказов', fontsize=16, labelpad=15)
+        ax.set_title('Распределение заказов в неделе', fontsize=24)
+
+        fig.set_figwidth(12)
+        fig.set_figheight(6)
+        if save:
+            plt.savefig(f"{datetime.datetime.fromtimestamp(time.time()).strftime('%d.%m.%Y_%H.%M.%S')}.png")
+        plt.show()
+
+
 def main():
     Plot().order_per_hour()
     Plot().order_per_mouth()
     Plot().order_per_day()
+    Plot().order_per_week()
 
 
 if __name__ == '__main__':
