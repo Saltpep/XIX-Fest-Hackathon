@@ -87,6 +87,8 @@ class Plot:
 
 
 def main():
+    Plot().order_per_hour()
+    Plot().order_per_mouth()
     Plot().order_per_day()
 
 
