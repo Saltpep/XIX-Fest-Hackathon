@@ -42,3 +42,5 @@ cooking_time = 25
 
 maximum_orders_per_courier = 3
 filepath = environ["PATHCSV"]
+
+city_name = 'Arkhangelsk, Arkhangelsk Oblast, Russian Federation'
