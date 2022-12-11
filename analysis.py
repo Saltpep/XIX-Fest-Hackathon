@@ -13,6 +13,7 @@ class Plot:
         self.csvpath = filepath
         self.orders_per_hours = [0 for _ in range(24)]
         self.orders_per_mouths = [0 for _ in range(12)]
+        self.orders_per_day = [0 for _ in range(31)]
 
     def csv_parser(self) -> list[tuple[Any, Any, Any, Any]]:
         csv_data = []
@@ -67,8 +68,26 @@ class Plot:
         plt.show()
 
 
+    def order_per_day(self, save: bool = False):
+        for row in Plot().csv_parser():
+            day = int(row[0].split('.')[0])
+            self.orders_per_day[day-1] += 1
+        fig, ax = plt.subplots()
+        ax.bar(list(map(str, range(1, 32))), self.orders_per_day, color="yellow", edgecolor="black")
+        ax.grid(axis='y', linestyle='--')
+
+        ax.set_ylabel('Кол-во заказов', fontsize=16, labelpad=15)
+        ax.set_title('Распределение заказов по дням', fontsize=24)
+
+        fig.set_figwidth(12)
+        fig.set_figheight(6)
+        if save:
+            plt.savefig(f"{datetime.datetime.fromtimestamp(time.time()).strftime('%d.%m.%Y_%H.%M.%S')}.png")
+        plt.show()
+
+
 def main():
-    Plot().order_per_mouth()
+    Plot().order_per_day()
 
 
 if __name__ == '__main__':
