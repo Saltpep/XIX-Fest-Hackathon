@@ -1,7 +1,4 @@
-from abc import ABC
-
 from config import *
-
 from path_finder import CityGraph
 
 
@@ -13,10 +10,7 @@ def main():
 
     path = walk_graph.shortest_path(origin, destination)
 
-    print(walk_graph.path_length(path))
-
-    route_map = walk_graph.plot_path_folium(path)
-    route_map.save("./cache/city_map.html")
+    walk_graph.save_html_map(path, './cache/city_map.html')
 
 
 if __name__ == '__main__':
