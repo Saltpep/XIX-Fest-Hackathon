@@ -86,7 +86,6 @@ class Plot:
             plt.savefig(f"{datetime.datetime.fromtimestamp(time.time()).strftime('%d.%m.%Y_%H.%M.%S')}.png")
         plt.show()
 
-
     def order_per_week(self, save: bool = False):
         weeks = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс",]
 
