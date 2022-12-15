@@ -15,6 +15,7 @@ class Plot:
         self.orders_per_mouths = [0 for _ in range(12)]
         self.orders_per_day = [0 for _ in range(31)]
         self.orders_per_week = [0 for _ in range(7)]
+        self.average_orders_per_week = [0 for _ in range(7)]
 
     def csv_parser(self) -> list[tuple[Any, Any, Any, Any]]:
         csv_data = []
@@ -118,11 +119,15 @@ class Plot:
                 days += 1
                 temp_dw.append(day_week)
             week = datetime.datetime(int(date[2]), int(date[1]), int(date[0]))
-            self.orders_per_week[week.weekday()] += 1
+            self.average_orders_per_week[week.weekday()] += 1
         for i in range(len(self.orders_per_week)):
-            self.orders_per_week[i] /= days
+            self.average_orders_per_week[i] /= days
+
+        average_order_per_day_in_week = sum(self.average_orders_per_week) / len(self.average_orders_per_week)
+        print(f"Среднее кол-во заказов в день: {round(average_order_per_day_in_week)}")
+
         fig, ax = plt.subplots()
-        ax.bar(weeks, self.orders_per_week, color="yellow", edgecolor="black")
+        ax.bar(weeks, self.average_orders_per_week, color="yellow", edgecolor="black")
         ax.grid(axis='y', linestyle='--')
 
         ax.set_ylabel('Кол-во заказов', fontsize=16, labelpad=15)
@@ -136,10 +141,10 @@ class Plot:
 
 
 def main():
-    # Plot().order_per_hour()
-    # Plot().order_per_mouth()
-    # Plot().order_per_day()
-    # Plot().order_per_week()
+    Plot().order_per_hour()
+    Plot().order_per_mouth()
+    Plot().order_per_day()
+    Plot().order_per_week()
     Plot().average_order_per_week()
 
 
