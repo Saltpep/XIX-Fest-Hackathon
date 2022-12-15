@@ -87,7 +87,7 @@ class Plot:
         plt.show()
 
     def order_per_week(self, save: bool = False):
-        weeks = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс",]
+        weeks = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
 
         for row in Plot().csv_parser():
             date = row[0].split('.')
@@ -107,12 +107,40 @@ class Plot:
             plt.savefig(f"{datetime.datetime.fromtimestamp(time.time()).strftime('%d.%m.%Y_%H.%M.%S')}.png")
         plt.show()
 
+    def average_order_per_week(self, save: bool = False):
+        weeks = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс", ]
+        days = 0
+        temp_dw = []
+        for row in Plot().csv_parser():
+            date = row[0].split('.')
+            day_week = list(map(int, date[:2]))
+            if day_week not in temp_dw:
+                days += 1
+                temp_dw.append(day_week)
+            week = datetime.datetime(int(date[2]), int(date[1]), int(date[0]))
+            self.orders_per_week[week.weekday()] += 1
+        for i in range(len(self.orders_per_week)):
+            self.orders_per_week[i] /= days
+        fig, ax = plt.subplots()
+        ax.bar(weeks, self.orders_per_week, color="yellow", edgecolor="black")
+        ax.grid(axis='y', linestyle='--')
+
+        ax.set_ylabel('Кол-во заказов', fontsize=16, labelpad=15)
+        ax.set_title('Среднее кол-во заказов по дням в неделе', fontsize=24)
+
+        fig.set_figwidth(12)
+        fig.set_figheight(6)
+        if save:
+            plt.savefig(f"{datetime.datetime.fromtimestamp(time.time()).strftime('%d.%m.%Y_%H.%M.%S')}.png")
+        plt.show()
+
 
 def main():
-    Plot().order_per_hour()
-    Plot().order_per_mouth()
-    Plot().order_per_day()
-    Plot().order_per_week()
+    # Plot().order_per_hour()
+    # Plot().order_per_mouth()
+    # Plot().order_per_day()
+    # Plot().order_per_week()
+    Plot().average_order_per_week()
 
 
 if __name__ == '__main__':
