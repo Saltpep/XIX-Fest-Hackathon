@@ -3,11 +3,18 @@ from typing import Any, Tuple
 import osmnx
 import networkx
 
+from courier import Courier
+
 
 class CityGraph:
-    def __init__(self, place: str, network_type: str, simplify: bool, optimize_for: str = 'time'):
-        self.__graph = osmnx.graph_from_place(place, network_type=network_type, simplify=simplify)
+    def __init__(self, place: str, courier_type: Courier | str, simplify: bool, optimize_for: str = 'time'):
+        self.__graph = osmnx.graph_from_place(place,
+                                              network_type=courier_type.map_type
+                                              if isinstance(courier_type, Courier)
+                                              else courier_type,
+                                              simplify=simplify)
         self.__optimize_for = optimize_for
+        self.__courier_type = courier_type
 
     @property
     def optimizer(self) -> str:
@@ -44,6 +51,10 @@ class CityGraph:
             edge_length: float = edge_data.get(0).get('length')
             length += edge_length
         return length
+
+    def save_html_map(self, path: 'list[int]', file_name: str, tiles: str = 'openstreetmap') -> None:
+        route_map = self.plot_path_folium(path, tiles)
+        route_map.save(file_name)
 
 
 if __name__ == 'path_finder':
